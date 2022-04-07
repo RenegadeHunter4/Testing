@@ -122,40 +122,103 @@ std::string removeSpaces(std::string input) {
 	return input;
 }
 
-std::string checkForParentheses(std::string input, std::string (&parenthesesArray)[32]) {
+void checkForParentheses(std::string input, int (&parenthesesRank)[32], int(&parenthesesLocation)[32]) {
+	//Init Variables
 	int arrayI = 0;
-	char letter = 'a';
+	int rank = 0;
 
+	//Loops Through Screen
 	for (int i = 0; i < input.length(); i++) {
-		if ((input[i] == '(') || (input[i] == '[')) {
-			if (arrayI != 0) { letter++; }
-			std::string l(1, letter);
-			parenthesesArray[arrayI] = l + std::to_string(i);
+		if ((input[i] == '(') || (input[i] == '[')) { //checks for open parenthesies
+			if (arrayI != 0) { rank++; }              //idk why this works but it does
+			parenthesesRank[arrayI] = rank;           //sets how deep the parenethesies are
+			parenthesesLocation[arrayI] = i;          //sets where the parenthesies are
 			arrayI++;
 		}
-		else if ((input[i] == ')') || (input[i] == ']')) {
-			std::string l(1, letter);
-			parenthesesArray[arrayI] = l + std::to_string(i);
+		else if ((input[i] == ')') || (input[i] == ']')) { //Checks for Closed Parenthesies
+			parenthesesRank[arrayI] = rank;				   //sets how deep the parenethesies a
+			parenthesesLocation[arrayI] = i;			   //sets where the parenthesies are
 			arrayI++;
-			letter--;
+			rank--;
 		}
 	}
 
-	for (int i = 0; i < 32; i++) {
-		std::cout << parenthesesArray[i] << " ";
+	//ForTesting-------------------------------------Start
+
+	//Prints parenthesesRank Array
+	for (int i = 0; i < arrayI; i++) {
+		std::cout << parenthesesRank[i] << " ";
 	}
 	std::cout << std::endl;
 
-	return input;
+	//Prints parenthesesLocation Array
+	for (int i = 0; i < arrayI; i++) {
+		std::cout << parenthesesLocation[i] << " ";
+	}
+	std::cout << std::endl;
+
+	//ForTesting-------------------------------------End
+}
+
+void checkForNumbers(std::string input, double(&numberList)[32], int(&numberLocation)[32]) {
+	//Init Variables
+	std::string num = "";
+	int arrayI = 0;
+
+	//Loops over string
+	for (int i = 0; i < input.length(); i++) {
+		if (isdigit(input[i]) || (input[i] == '.')) {
+
+			//Records Location of start of number
+			if (num.empty()) {
+				numberLocation[arrayI] = i; 
+			}
+
+			//Records Full number into var num.
+			num = num + input[i]; 
+		}
+		else {
+			//Puts number into numberList Array
+			if (!num.empty()) {
+				numberList[arrayI] = stod(num); 
+				num = "";
+				arrayI++;
+			}
+		}
+	}
+
+	//Incase string ends on a number
+	if (!num.empty()) {
+		numberList[arrayI] = stod(num);
+	}
+
+	//ForTesting-------------------------------------Start
+
+	//Prints numberList Array
+	for (int i = 0; i <= arrayI; i++) {
+		std::cout << numberList[i] << " ";
+	}
+	std::cout << std::endl;
+
+	//Prints numberLocation Array
+	for (int i = 0; i <= arrayI; i++) {
+		std::cout << numberLocation[i] << " ";
+	}
+	std::cout << std::endl;
+
+	//ForTesting-------------------------------------End
 }
 
 int main() {
 	std::cout << "Creating Window\n";
-	std::string parentheses[32];
+	int parenthesesRank[32];
+	int parenthesesLocation[32];
+	double numberList[32];
+	int numberLocation[32];
 
 	std::string input;
 	std::getline(std::cin, input);
-	std::cout << checkForParentheses(removeSpaces(input), parentheses) << std::endl;
+	std::cout << checkForNumbers(removeSpaces(input), numberList, numberLocation) << std::endl;
 
 	/*
 	Window* window = new Window();
