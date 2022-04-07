@@ -218,7 +218,7 @@ int main() {
 
 	std::string input;
 	std::getline(std::cin, input);
-	std::cout << checkForNumbers(removeSpaces(input), numberList, numberLocation) << std::endl;
+	std::cout << removeSpaces(input) << std::endl;
 
 	/*
 	Window* window = new Window();
