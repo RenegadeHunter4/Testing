@@ -1,5 +1,7 @@
 #include "main.h"
 
+const int size = 32;
+
 double inputProcessing(const std::string input) {
 
 	// Decalre Variables
@@ -122,7 +124,7 @@ std::string removeSpaces(std::string input) {
 	return input;
 }
 
-void checkForParentheses(std::string input, int (&parenthesesRank)[32], int(&parenthesesLocation)[32]) {
+void checkForParentheses(std::string input, int (&parenthesesRank)[size], int(&parenthesesLocation)[size]) {
 	//Init Variables
 	int arrayI = 0;
 	int rank = 0;
@@ -160,7 +162,7 @@ void checkForParentheses(std::string input, int (&parenthesesRank)[32], int(&par
 	//ForTesting-------------------------------------End
 }
 
-void checkForNumbers(std::string input, double(&numberList)[32], int(&numberLocation)[32]) {
+void checkForNumbers(std::string input, double(&numberList)[size], int(&numberLocation)[size]) {
 	//Init Variables
 	std::string num = "";
 	int arrayI = 0;
@@ -209,12 +211,55 @@ void checkForNumbers(std::string input, double(&numberList)[32], int(&numberLoca
 	//ForTesting-------------------------------------End
 }
 
+bool isOperator(const char op) {
+	if ((op == '+') || (op == '-') || (op == '*') || (op == '/') || (op == '^')) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+void checkForOperators(std::string input, int(&operatorLocation)[size], char (&operatorList)[size]) {
+	//Init Variables
+	int arrayI = 0;
+
+	//Loops over string
+	for (int i = 0; i < input.length(); i++) {
+		if (isOperator(input[i])) {
+			operatorLocation[arrayI] = i;
+			operatorList[arrayI] = input[i];
+			arrayI++;
+		}
+	}
+
+	arrayI--;
+
+	//ForTesting-------------------------------------Start
+
+	//Prints numberList Array
+	for (int i = 0; i <= arrayI; i++) {
+		std::cout << operatorList[i] << " ";
+	}
+	std::cout << std::endl;
+
+	//Prints numberLocation Array
+	for (int i = 0; i <= arrayI; i++) {
+		std::cout << operatorLocation[i] << " ";
+	}
+	std::cout << std::endl;
+
+	//ForTesting-------------------------------------End
+}
+
 int main() {
 	std::cout << "Creating Window\n";
-	int parenthesesRank[32];
-	int parenthesesLocation[32];
-	double numberList[32];
-	int numberLocation[32];
+	int parenthesesRank[size];
+	int parenthesesLocation[size];
+	double numberList[size];
+	int numberLocation[size];
+	int operatorLocation[size];
+	char operatorList[size];
 
 	std::string input;
 	std::getline(std::cin, input);
